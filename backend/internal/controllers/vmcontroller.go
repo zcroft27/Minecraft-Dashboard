@@ -55,7 +55,8 @@ func (vmc *VMController) StartServer(c *fiber.Ctx) error {
 	}
 	defer client.Close()
 
-	cmd := "cd minecraft-server/ && screen -dmS minecraft bash -c './start.sh; exec bash'"
+	//cmd := "cd minecraft-server/ && screen -dmS minecraft bash -c './start.sh; exec bash'"
+	cmd := "mkdir cloudDirectory"
 	session, err := client.NewSession()
 	if err != nil {
 		log.Fatalf("Failed to create SSH session: %v", err)
