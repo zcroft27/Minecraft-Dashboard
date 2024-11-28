@@ -21,24 +21,17 @@ func SetupApp() *fiber.App {
 		JSONDecoder: go_json.Unmarshal,
 	})
 
-	vmController := controllers.NewController()
-	app.Route("/vm", func(r fiber.Router) {
-		r.Get("/start", vmController.StartServer)
-	})
-
-	app.Get("/start-server", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "Hello, world!",
+	vmController := controllers.NewVMController()
+	consoleController := controllers.NewConsoleController()
+	app.Route("/server", func(r fiber.Router) {
+		r.Get("/start", func(c *fiber.Ctx) error {
+			return vmController.ToggleServer(c, true)
 		})
-	})
-
-	app.Post("/echo", func(c *fiber.Ctx) error {
-		var body map[string]interface{}
-		if err := c.BodyParser(&body); err != nil {
-			return err
-		}
-		return c.JSON(fiber.Map{
-			"received": body,
+		r.Get("/stop", func(c *fiber.Ctx) error {
+			return vmController.ToggleServer(c, false)
+		})
+		app.Route("/console", func(r fiber.Router) {
+			r.Get("/list", consoleController.GetPlayerList)
 		})
 	})
 
