@@ -27,3 +27,4 @@ Thumbs.db
 
 # SSH private keys (keep private)
 *.pem
+ minecraft-server-key.pem\:Zone.Identifier
