@@ -55,7 +55,7 @@ func (vmc *VMController) StartServer(c *fiber.Ctx) error {
 	}
 	defer client.Close()
 
-	cmd := "mkdir testDir2"
+	cmd := "cd minecraft-server/ && screen -dmS minecraft bash -c './start.sh; exec bash'"
 	session, err := client.NewSession()
 	if err != nil {
 		log.Fatalf("Failed to create SSH session: %v", err)
@@ -70,7 +70,6 @@ func (vmc *VMController) StartServer(c *fiber.Ctx) error {
 		return err
 	}
 
-	// Return the output of the command execution
 	return c.JSON(fiber.Map{
 		"message": string(output),
 	})
