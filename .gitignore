@@ -1,0 +1,29 @@
+# Go binary files
+/bin/
+/obj/
+*.exe
+*.out
+*.test
+
+# Build directories
+/build/
+dist/
+
+# Go workspace files
+*.idea/
+.vscode/
+
+# IDEs and Editors
+*.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Environment files (such as the private key or credentials)
+.env
+
+# SSH private keys (keep private)
+*.pem
