@@ -19,14 +19,15 @@ func NewController() *VMController {
 func (vmc *VMController) StartServer(c *fiber.Ctx) error {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatalf("Error loading .env file: %v", err)
+		return err
 	}
 
-	// SSH credentials and remote VM information
-	hostname := "mc.zachlearns.com"
+	hostname := os.Getenv("vmIP")
 	port := "22"
 	username := "zcroft27"
-	privateKeyPath := "../mckey.pem"
+	privateKeyPath := "./mckey.pem"
+
 	privateKeyBytes, err := os.ReadFile(privateKeyPath)
 	if err != nil {
 		log.Fatalf("Failed to read private key: %v", err)
@@ -54,7 +55,7 @@ func (vmc *VMController) StartServer(c *fiber.Ctx) error {
 	}
 	defer client.Close()
 
-	cmd := "echo 'test'"
+	cmd := "mkdir testDir2"
 	session, err := client.NewSession()
 	if err != nil {
 		log.Fatalf("Failed to create SSH session: %v", err)
