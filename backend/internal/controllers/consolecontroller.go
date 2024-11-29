@@ -16,7 +16,7 @@ func NewConsoleController() *ConsoleController {
 }
 
 func (cc *ConsoleController) GetPlayerList(c *fiber.Ctx) error {
-	cmd := "screen -r minecraft && list"
+	cmd := "cd minecraft-server ; list"
 
 	output, err := cc.SSHClient.ConnectAndExecute(cmd)
 	if err != nil {

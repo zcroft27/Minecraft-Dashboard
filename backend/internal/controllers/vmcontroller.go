@@ -19,9 +19,9 @@ func (vmc *VMController) ToggleServer(c *fiber.Ctx, startServer bool) error {
 	var cmd string
 
 	if startServer {
-		cmd = "screen -ls | grep -q minecraft || screen -dmS minecraft"
+		cmd = "cd minecraft-server ; ./start-server.sh"
 	} else {
-		cmd = "screen -r minecraft && stop && screen -X quit"
+		cmd = "cd minecraft-server ; ./stop-server.sh"
 	}
 
 	output, err := vmc.SSHClient.ConnectAndExecute(cmd)
