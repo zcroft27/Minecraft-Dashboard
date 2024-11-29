@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/ssh"
 	"log"
