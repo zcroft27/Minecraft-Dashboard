@@ -8,7 +8,7 @@ I will host this project on a very lightweight (probably B1ls) virtual machine, 
 ## The Backend
 I have endpoints that allow starting and stopping of the server, executing select commands on the server (/list, /ban <player>, etc.) remotely,
 and running vm diagnostics (free -h to see RAM usage, etc.).   
-These endpoints are in progress, but will be protected using JSON web tokens. They use the [crypto SSH](golang.org/x/crypto/ssh) library
+These endpoints are in progress, but will be protected using JSON web tokens(? need to research). They use the [crypto SSH](golang.org/x/crypto/ssh) library
 for connecting over SSH and sending commands.
 
 I use a three layer Controller-Service-Repository architecture for this project. Currently, the repository layer is unused,
