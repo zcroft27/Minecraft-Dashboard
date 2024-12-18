@@ -25,15 +25,5 @@ func ConnectDatabase(config *pxgpool.Config) *pgxpool.Pool {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}
 	defer pool.Close()
-
-	// Test the connection with a simple query
-	var dbVersion string
-	err = pool.QueryRow(context.Background(), "SELECT version()").Scan(&dbVersion)
-	if err != nil {
-		log.Fatalf("Query failed: %v\n", err)
-	}
-	fmt.Printf("Connected to database: %s\n", dbVersion)
-
-	// You can now use `pool` to execute queries or transactions
 }
 
