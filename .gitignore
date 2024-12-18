@@ -22,9 +22,9 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Environment files (such as the private key or credentials)
+# Environment files
 .env
 
-# SSH private keys (keep private)
+# SSH private keys
 *.pem
  minecraft-server-key.pem:Zone.Identifier

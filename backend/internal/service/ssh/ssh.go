@@ -1,12 +1,12 @@
-package services
+package ssh
 
 import (
 	"fmt"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/joho/godotenv"
-	"golang.org/x/crypto/ssh"
+	//"github.com/golang-jwt/jwt/v5"
 	"log"
 	"os"
+
+	"golang.org/x/crypto/ssh"
 )
 
 type SSHClient struct{}
@@ -16,16 +16,10 @@ func NewSSHClient() *SSHClient {
 }
 
 func (s *SSHClient) ConnectAndExecute(cmd string) (string, error) {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-		return "", err
-	}
-
-	hostname := os.Getenv("vmIP")
+	hostname := os.Getenv("VM_IP")
 	port := "22"
-	username := "zcroft27"
-	privateKeyPath := "./mckey.pem"
+	username := os.Getenv("VM_USERNAME")
+	privateKeyPath := os.Getenv("PRIVATE_KEY_PATH")
 
 	privateKeyBytes, err := os.ReadFile(privateKeyPath)
 	if err != nil {

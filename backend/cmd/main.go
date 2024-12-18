@@ -1,39 +1,39 @@
 package main
 
 import (
-	go_json "github.com/goccy/go-json"
-	"github.com/gofiber/fiber/v2"
+	"context"
 	"log"
-	"mcdashboard/internal/controllers"
+	"mcdashboard/internal/config"
+	"mcdashboard/internal/service"
+
+	"github.com/joho/godotenv"
+
+	"github.com/sethvargo/go-envconfig"
 )
 
 func main() {
-	app := SetupApp()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+		return
+	}
 
-	if err := app.Listen(":8080"); err != nil {
+	var config config.Config
+	if err := envconfig.Process(context.Background(), &config); err != nil {
+		log.Fatalln("Error processing .env file: ", err)
+	}
+
+	app := service.InitApp(config)
+
+	err = app.Repo.TestConnection(context.Background())
+	if err != nil {
+		log.Fatalf("Error connecting to the database: %v", err)
+		return
+	}
+
+	defer app.Repo.Close()
+
+	if err := app.Server.Listen(":" + "6543"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
-}
-
-func SetupApp() *fiber.App {
-	app := fiber.New(fiber.Config{
-		JSONEncoder: go_json.Marshal,
-		JSONDecoder: go_json.Unmarshal,
-	})
-
-	vmController := controllers.NewVMController()
-	consoleController := controllers.NewConsoleController()
-	app.Route("/server", func(r fiber.Router) {
-		r.Get("/start", func(c *fiber.Ctx) error {
-			return vmController.ToggleServer(c, true)
-		})
-		r.Get("/stop", func(c *fiber.Ctx) error {
-			return vmController.ToggleServer(c, false)
-		})
-		app.Route("/console", func(r fiber.Router) {
-			r.Get("/list", consoleController.GetPlayerList)
-		})
-	})
-
-	return app
 }

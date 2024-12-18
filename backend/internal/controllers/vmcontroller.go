@@ -1,17 +1,18 @@
 package controllers
 
 import (
+	"mcdashboard/internal/service/ssh"
+
 	"github.com/gofiber/fiber/v2"
-	"mcdashboard/internal/services"
 )
 
 type VMController struct {
-	SSHClient *services.SSHClient
+	SSHClient *ssh.SSHClient
 }
 
 func NewVMController() *VMController {
 	return &VMController{
-		services.NewSSHClient(),
+		ssh.NewSSHClient(),
 	}
 }
 

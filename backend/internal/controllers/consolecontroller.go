@@ -1,17 +1,18 @@
 package controllers
 
 import (
+	"mcdashboard/internal/service/ssh"
+
 	"github.com/gofiber/fiber/v2"
-	"mcdashboard/internal/services"
 )
 
 type ConsoleController struct {
-	SSHClient *services.SSHClient
+	SSHClient *ssh.SSHClient
 }
 
 func NewConsoleController() *ConsoleController {
 	return &ConsoleController{
-		services.NewSSHClient(),
+		ssh.NewSSHClient(),
 	}
 }
 
