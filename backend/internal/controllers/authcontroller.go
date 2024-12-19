@@ -60,8 +60,7 @@ func (ac *AuthController) Login(ctx *fiber.Ctx) error {
 	// Sign up the user using Supabase
 	response, err := auth.Login(ac.Supabase, req.Email, req.Password)
 	if err != nil {
-		return err
-		// return fiber.NewError(fiber.StatusInternalServerError, "Signup failed")
+		return fiber.NewError(fiber.StatusInternalServerError, "Signup failed")
 	}
 
 	// Store the access token in the context
@@ -70,6 +69,16 @@ func (ac *AuthController) Login(ctx *fiber.Ctx) error {
 	ctx.Cookie(&fiber.Cookie{
 		Name:     "access_token",
 		Value:    response.AccessToken,
+		Expires:  time.Now().Add(24 * time.Hour),
+		HTTPOnly: true,
+		Secure:   true,
+		SameSite: fiber.CookieSameSiteStrictMode,
+	})
+
+	// Set the user id in a cookie
+	ctx.Cookie(&fiber.Cookie{
+		Name:     "user_id",
+		Value:    response.User.ID.String(),
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
 		Secure:   true,
