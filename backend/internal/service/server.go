@@ -32,6 +32,12 @@ func SetupApp() *fiber.App {
 
 	vmController := controllers.NewVMController()
 	consoleController := controllers.NewConsoleController()
+	authController := controllers.NewAuthController()
+
+	app.Route("/dashboard", func(r fiber.Router) {
+		r.Post("/login", authController.Login)
+	})
+
 	app.Route("/server", func(r fiber.Router) {
 		r.Get("/start", func(c *fiber.Ctx) error {
 			return vmController.ToggleServer(c, true)

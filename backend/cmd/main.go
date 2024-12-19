@@ -25,11 +25,11 @@ func main() {
 
 	app := service.InitApp(config)
 
-	err = app.Repo.TestConnection(context.Background())
-	if err != nil {
-		log.Fatalf("Error connecting to the database: %v", err)
-		return
-	}
+	// err = app.Repo.TestConnection(context.Background())
+	// if err != nil {
+	// 	log.Fatalf("Error connecting to the database: %v", err)
+	// 	return
+	// }
 
 	defer app.Repo.Close()
 
