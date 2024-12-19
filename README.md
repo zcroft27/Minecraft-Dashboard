@@ -19,7 +19,7 @@ I will use React + TypeScript to create a frontend dashboard.
 
 ## General Design Choices
 I intentionally do not want to be able to start/stop the **VM** from this dashboard, and do not want to parameterize the execution
-of SSH commands. The VM should only be turned on from the Azure dashboard. If my endpoints become vulnerable, I want a extra layer of security,
+of SSH commands. The VM should only be turned on from the Azure dashboard. If my endpoints become vulnerable, I want an extra layer of security,
 ensuring the VM is off when I want it to be. While allowing full console control could be nice, to do so would require allowing any command to be entered,
 which I don't feel comfortable securing.
 
