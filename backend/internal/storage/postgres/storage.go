@@ -12,11 +12,11 @@ import (
 
 // Repository storage of all repositories.
 type Repository struct {
-	db *pgxpool.Pool
+	DB *pgxpool.Pool
 }
 
 func (r *Repository) Close() error {
-	r.db.Close()
+	r.DB.Close()
 	return nil
 }
 
@@ -45,13 +45,13 @@ func NewRepository(config config.DB) *Repository {
 	db := ConnectDatabase(config)
 
 	return &Repository{
-		db: db,
+		DB: db,
 	}
 }
 
 func (r *Repository) TestConnection(ctx context.Context) error {
 	var currentTime time.Time
-	err := r.db.QueryRow(ctx, `SELECT NOW()`).Scan(&currentTime)
+	err := r.DB.QueryRow(ctx, `SELECT NOW()`).Scan(&currentTime)
 	if err != nil {
 		return fmt.Errorf("failed to test database connection: %w", err)
 	}

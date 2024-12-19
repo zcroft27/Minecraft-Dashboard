@@ -6,7 +6,8 @@ import (
 )
 
 type Config struct {
-	DB DB
+	DB       DB
+	Supabase Supabase
 }
 
 func (c *DB) Connection() string {

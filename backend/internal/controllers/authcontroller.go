@@ -1,41 +1,85 @@
 package controllers
 
 import (
-	"backend/internal/auth"
+	"mcdashboard/internal/auth"
+	"mcdashboard/internal/config"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-type AuthController struct{}
+type AuthController struct {
+	Supabase *config.Supabase
+}
+
+func NewAuthController(supabase *config.Supabase) *AuthController {
+	return &AuthController{Supabase: supabase}
+}
+
+type SignupRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
 
 type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-func NewAuthController() *AuthController {
-	return &AuthController{}
-}
+func (ac *AuthController) Signup(ctx *fiber.Ctx) error {
+	var req SignupRequest
 
-func (ac *AuthController) Login(c *fiber.Ctx) error {
-	var loginData LoginRequest
-
-	if err := c.BodyParser(&loginData); err != nil {
-		return err
+	// Parse the request body
+	if err := ctx.BodyParser(&req); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid request")
 	}
 
-	email := loginData.Email
-	password := loginData.Password
-
-	resp, err := auth.GetAuthToken(&ac.config, email, password)
-
+	// Sign up the user using Supabase
+	response, err := auth.SupabaseSignup(ac.Supabase, req.Email, req.Password)
 	if err != nil {
 		return err
+		// return fiber.NewError(fiber.StatusInternalServerError, "Signup failed")
 	}
 
-	if err := h.store.SetUser(c, resp.User.ID); err != nil {
+	// Return access token and user data to the frontend
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"message":      "User created successfully",
+		"access_token": response.AccessToken,
+		"user_id":      response.User.ID,
+	})
+}
+
+func (ac *AuthController) Login(ctx *fiber.Ctx) error {
+	var req LoginRequest
+
+	// Parse the request body
+	if err := ctx.BodyParser(&req); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid request")
+	}
+
+	// Sign up the user using Supabase
+	response, err := auth.Login(ac.Supabase, req.Email, req.Password)
+	if err != nil {
 		return err
+		// return fiber.NewError(fiber.StatusInternalServerError, "Signup failed")
 	}
 
-	return c.Status(fiber.StatusOK).JSON(resp)
+	// Store the access token in the context
+
+	// Set the access token in a cookie
+	ctx.Cookie(&fiber.Cookie{
+		Name:     "access_token",
+		Value:    response.AccessToken,
+		Expires:  time.Now().Add(24 * time.Hour),
+		HTTPOnly: true,
+		Secure:   true,
+		SameSite: fiber.CookieSameSiteStrictMode,
+	})
+
+	// Return access token and user data to the frontend
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"message":      "User logged in successfully",
+		"access_token": response.AccessToken,
+		"user_id":      response.User.ID,
+	})
 }

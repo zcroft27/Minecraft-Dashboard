@@ -1,12 +1,14 @@
 package service
 
 import (
+	"mcdashboard/internal/auth"
 	"mcdashboard/internal/config"
 	"mcdashboard/internal/controllers"
 	storage "mcdashboard/internal/storage/postgres"
 
 	go_json "github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type App struct {
@@ -15,8 +17,8 @@ type App struct {
 }
 
 func InitApp(config config.Config) *App {
-	app := SetupApp()
 	repo := storage.NewRepository(config.DB)
+	app := SetupApp(config, repo.DB)
 
 	return &App{
 		Server: app,
@@ -24,7 +26,7 @@ func InitApp(config config.Config) *App {
 	}
 }
 
-func SetupApp() *fiber.App {
+func SetupApp(config config.Config, dbPool *pgxpool.Pool) *fiber.App {
 	app := fiber.New(fiber.Config{
 		JSONEncoder: go_json.Marshal,
 		JSONDecoder: go_json.Unmarshal,
@@ -32,11 +34,14 @@ func SetupApp() *fiber.App {
 
 	vmController := controllers.NewVMController()
 	consoleController := controllers.NewConsoleController()
-	authController := controllers.NewAuthController()
+	signUpController := controllers.NewAuthController(&config.Supabase)
 
-	app.Route("/dashboard", func(r fiber.Router) {
-		r.Post("/login", authController.Login)
-	})
+	authMiddleware := auth.Middleware(&config.Supabase, dbPool)
+
+	app.Post("/sign-up", signUpController.Signup)
+	app.Post("login", signUpController.Login)
+
+	app.Use("/server", authMiddleware)
 
 	app.Route("/server", func(r fiber.Router) {
 		r.Get("/start", func(c *fiber.Ctx) error {
