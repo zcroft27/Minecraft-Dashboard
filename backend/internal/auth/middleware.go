@@ -18,8 +18,6 @@ func Middleware(config *config.Supabase, db *pgxpool.Pool) fiber.Handler {
 		}
 
 		userID := ctx.Cookies("user_id")
-		print(userID)
-		print("AFTER USERID")
 		var role string
 		err := db.QueryRow(context.Background(), "SELECT 'role' FROM auth.users WHERE id = $1", userID).Scan(&role)
 		if err != nil {

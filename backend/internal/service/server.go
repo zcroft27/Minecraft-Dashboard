@@ -41,9 +41,9 @@ func SetupApp(config config.Config, dbPool *pgxpool.Pool) *fiber.App {
 	app.Post("/sign-up", signUpController.Signup)
 	app.Post("login", signUpController.Login)
 
-	app.Use("/server", authMiddleware)
+	app.Use("/vm", authMiddleware)
 
-	app.Route("/server", func(r fiber.Router) {
+	app.Route("/vm/server", func(r fiber.Router) {
 		r.Get("/start", func(c *fiber.Ctx) error {
 			return vmController.ToggleServer(c, true)
 		})
