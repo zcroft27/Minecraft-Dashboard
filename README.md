@@ -21,17 +21,15 @@ I have implemented authentication and authorization using pgx and raw HTTP reque
 
 The request to the 'login' route will store an access token and userID in the session cookies. These cookies are essential. Any route
 within the route /vm/* will use a middleware that validates the access token with the JWTSecret token in the .env and validate
-that the role set for the user is 'admin.' This role has to be manually set with a migration script over Supabase CLI as the web interface disallows mutation.
+that the role set for the user is 'admin.' This role has to be manually set with a migration script over Supabase CLI as the web interface disallows mutation within the auth schema.
 
 
 I have endpoints that allow starting and stopping of the server, executing select commands on the server (/list, /ban <player>, etc.) remotely,
 and running vm diagnostics (free -h to see RAM usage, etc.).   
-These endpoints are in progress, but will be protected using JSON web tokens(? need to research). They use the [crypto SSH](golang.org/x/crypto/ssh) library
+These endpoints use the [crypto SSH](golang.org/x/crypto/ssh) library
 for connecting over SSH and sending commands.
 
 I use a three layer Controller-Service-Repository architecture for this project.
-
-The repository layer currently contains a sanity check 'TestConnection' to validate that the connection is healthy.
 
 ## The Frontend
 The frontend dashboard is built with React + TypeScript.
