@@ -47,5 +47,5 @@ which I don't feel comfortable securing.
 My VM is hosted in Azure with a reverse proxy configured for the **mc.zachlearns.com** subdomain. The server is PurPur instead of Mojang's default server.
 
 ## Things That Caught Me Up
-I had a difficult time debugging an issue with 'prepared statements' already existing. [This thread](https://forum.bubble.io/t/sql-connector-issue-prepared-statement-supabase-integration/303849/3) thread helped, highlighting the differences between using ports 6543 and 5432. I need to learn more about PgBouncer, pooling, and prepared statements.   
+I had a difficult time debugging an issue with 'prepared statements' already existing. [This thread](https://forum.bubble.io/t/sql-connector-issue-prepared-statement-supabase-integration/303849/3) helped, highlighting the differences between using ports 6543 and 5432. I need to learn more about PgBouncer, pooling, and prepared statements.   
 Identifiers such as table names in PostgreSQL are converted to lowercase by default--nomenclature is important.
