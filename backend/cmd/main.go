@@ -33,7 +33,7 @@ func main() {
 
 	defer app.Repo.Close()
 
-	if err := app.Server.Listen(":" + "6543"); err != nil {
+	if err := app.Server.Listen(":" + "5432"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

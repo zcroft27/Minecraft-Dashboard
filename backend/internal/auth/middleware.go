@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"context"
 	"mcdashboard/internal/config"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,10 +17,15 @@ func Middleware(config *config.Supabase, db *pgxpool.Pool) fiber.Handler {
 		}
 
 		userID := ctx.Cookies("user_id")
+		print("USER ID: \n")
+		print(userID)
 		var role string
-		err := db.QueryRow(context.Background(), "SELECT 'role' FROM auth.users WHERE id = $1", userID).Scan(&role)
+		err := db.QueryRow(ctx.Context(), "SELECT role FROM public.user_role WHERE id = $1", userID).Scan(&role)
 		if err != nil {
-			return fiber.NewError(fiber.StatusUnauthorized, "Unable to fetch role")
+			print(err)
+			if err.Error() != "no rows in result set" {
+				return fiber.NewError(fiber.StatusUnauthorized, "Unable to fetch role")
+			}
 		}
 
 		if role != "admin" {
