@@ -1,7 +1,7 @@
 # Minecraft Server Dashboard
 
 ## Overview  
-This is a fullstack project to create a dashboard for
+This is a full-stack project to create a dashboard for
 managing a minecraft server (or really any server) in a virtual machine sending/executing commands over SSH.
 I will host this project on a very lightweight (probably B1ls) virtual machine, pointed to by a subdomain of my zachlearns.com domain.
 My Minecraft server is already hosted and available to read about on [my website](https://zachlearns.com/mc.html).
@@ -21,8 +21,7 @@ I have implemented authentication and authorization using pgx and raw HTTP reque
 
 The request to the 'login' route will store an access token and userID in the session cookies. These cookies are essential. Any route
 within the route /vm/* will use a middleware that validates the access token with the JWTSecret token in the .env and validate
-that the role set for the user is 'admin.' This role has to be manually set with a migration script over Supabase CLI, the web interface
-disallows mutation.
+that the role set for the user is 'admin.' This role has to be manually set with a migration script over Supabase CLI as the web interface disallows mutation.
 
 
 I have endpoints that allow starting and stopping of the server, executing select commands on the server (/list, /ban <player>, etc.) remotely,
