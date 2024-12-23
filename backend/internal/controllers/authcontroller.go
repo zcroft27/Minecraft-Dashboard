@@ -71,8 +71,8 @@ func (ac *AuthController) Login(ctx *fiber.Ctx) error {
 		Value:    response.AccessToken,
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
-		Secure:   true,
-		SameSite: fiber.CookieSameSiteStrictMode,
+		Secure:   false, // Not for use in production--get an SSL certification
+		SameSite: fiber.CookieSameSiteNoneMode,
 	})
 
 	// Set the user id in a cookie
@@ -81,8 +81,8 @@ func (ac *AuthController) Login(ctx *fiber.Ctx) error {
 		Value:    response.User.ID.String(),
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
-		Secure:   true,
-		SameSite: fiber.CookieSameSiteStrictMode,
+		Secure:   false, // Not for use in production--get an SSL certification
+		SameSite: fiber.CookieSameSiteNoneMode,
 	})
 
 	// Return access token and user data to the frontend

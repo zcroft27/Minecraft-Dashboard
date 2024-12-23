@@ -12,6 +12,9 @@ func Middleware(config *config.Supabase, db *pgxpool.Pool) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		token := ctx.Cookies("access_token")
 
+		print("TOKEN: \n")
+		print(token)
+
 		if token == "" {
 			return fiber.NewError(fiber.StatusBadRequest, "Unauthorized, no token")
 		}

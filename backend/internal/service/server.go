@@ -8,6 +8,8 @@ import (
 
 	go_json "github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -32,9 +34,19 @@ func SetupApp(config config.Config, dbPool *pgxpool.Pool) *fiber.App {
 		JSONDecoder: go_json.Unmarshal,
 	})
 
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:3000", // frontend URL
+		AllowCredentials: true,                    // Allow cookies to be sent
+		AllowMethods:     "GET,POST,PUT,DELETE",
+		AllowHeaders:     "Content-Type,Authorization",
+	}))
+
 	vmController := controllers.NewVMController()
 	consoleController := controllers.NewConsoleController()
 	signUpController := controllers.NewAuthController(&config.Supabase)
+
+	// Add logging on each request
+	app.Use(logger.New())
 
 	authMiddleware := auth.Middleware(&config.Supabase, dbPool)
 
