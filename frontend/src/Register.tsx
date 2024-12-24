@@ -22,7 +22,8 @@ const Register = () => {
         try {
             const response = await axios.post('http://localhost:5432/sign-up', {
                 email: email,
-                password: password
+                password: password,
+                credentials : true
             });
             
             navigate('/login');

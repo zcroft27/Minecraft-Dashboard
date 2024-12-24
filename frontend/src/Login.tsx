@@ -21,10 +21,10 @@ const Login = () => {
 
   const handleLogin = async () => {
             try {
-                const response = await axios.post('http://localhost:5432/login', {
-                    email: email,
-                    password: password
-                });
+              const response = await axios.post('http://localhost:5432/login', 
+                { email, password },
+                { withCredentials: true }
+              );
 
                 navigate('/');
             } catch (error) {

@@ -50,6 +50,10 @@ func SetupApp(config config.Config, dbPool *pgxpool.Pool) *fiber.App {
 
 	authMiddleware := auth.Middleware(&config.Supabase, dbPool)
 
+	app.Options("/*", func(c *fiber.Ctx) error {
+		return c.SendStatus(fiber.StatusOK)
+	})
+
 	app.Post("/sign-up", signUpController.Signup)
 	app.Post("login", signUpController.Login)
 

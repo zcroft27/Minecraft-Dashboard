@@ -14,25 +14,25 @@ import axios from 'axios';
 const Home = () => {
 // Function to start the server
 const startServer = async () => {
+  console.log('Cookies:', document.cookie);
   try {
-    const response = await axios.post('http://localhost:5432/vm/server/start', 
-        {
-            withCredentials: true,
-            credentials: 'include'
-
-        });
+    const response = await axios.get('http://localhost:5432/vm/server/start', {
+      withCredentials: true, // Include cookies
+    });
     console.log('Server started:', response.data);
     alert('Server started successfully!');
   } catch (error) {
     console.error('Error starting server:', error);
-    alert('Failed to start the server.');
+    alert('Failed to start the server.');     
   }
 };
 
 // Function to stop the server
 const stopServer = async () => {
   try {
-    const response = await axios.post('http://localhost:5432/vm/server/stop');
+    const response = await axios.get('http://localhost:5432/vm/server/stop', {
+      withCredentials: true, // Include cookies
+    });
     console.log('Server stopped:', response.data);
     alert('Server stopped successfully!');
   } catch (error) {

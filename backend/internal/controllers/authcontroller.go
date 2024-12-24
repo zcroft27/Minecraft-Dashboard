@@ -70,7 +70,7 @@ func (ac *AuthController) Login(ctx *fiber.Ctx) error {
 		Name:     "access_token",
 		Value:    response.AccessToken,
 		Expires:  time.Now().Add(24 * time.Hour),
-		HTTPOnly: true,
+		HTTPOnly: false,
 		Secure:   false, // Not for use in production--get an SSL certification
 		SameSite: fiber.CookieSameSiteNoneMode,
 	})
@@ -80,7 +80,7 @@ func (ac *AuthController) Login(ctx *fiber.Ctx) error {
 		Name:     "user_id",
 		Value:    response.User.ID.String(),
 		Expires:  time.Now().Add(24 * time.Hour),
-		HTTPOnly: true,
+		HTTPOnly: false,
 		Secure:   false, // Not for use in production--get an SSL certification
 		SameSite: fiber.CookieSameSiteNoneMode,
 	})
