@@ -2,8 +2,10 @@
 
 ## Overview  
 This is a full-stack project to create a dashboard for
-managing a minecraft server (or really any server) in a virtual machine sending/executing commands over SSH.
-I will host this project on a very lightweight (probably B1ls) virtual machine, pointed to by a subdomain of my zachlearns.com domain.
+managing a minecraft server--or really any server--in a virtual machine by sending commands over SSH.
+
+The frontend + backend are hosted on a Standard B1ms (1 vcpu, 2 GiB memory), pointed to by a subdomain of my zachlearns.com domain through a Cloudflared
+tunnel to hide the VM ip.
 My Minecraft server is already hosted and available to read about on [my website](https://zachlearns.com/mc.html).
 
 ## The Backend
@@ -19,7 +21,7 @@ I have implemented authentication and authorization using pgx and raw HTTP reque
   "password" : "mysecretpassword"
   }
 
-The request to the 'login' route will store an access token and userID in the session cookies. These cookies are essential. Any route
+A request to the 'login' route will store an access token and userID in the session cookies. These cookies are essential. Any route
 within the route /vm/* will use a middleware that validates the access token with the JWTSecret token in the .env and validate
 that the role set for the user is 'admin.' This role has to be manually set with a migration script over Supabase CLI as the web interface disallows mutation within the auth schema.
 
@@ -48,4 +50,8 @@ My VM is hosted in Azure with a reverse proxy configured for the **mc.zachlearns
 
 ## Things That Caught Me Up
 I had a difficult time debugging an issue with 'prepared statements' already existing. [This thread](https://forum.bubble.io/t/sql-connector-issue-prepared-statement-supabase-integration/303849/3) helped, highlighting the differences between using ports 6543 and 5432. I need to learn more about PgBouncer, pooling, and prepared statements.   
-Identifiers such as table names in PostgreSQL are converted to lowercase by default--nomenclature is important.
+Identifiers such as table names in PostgreSQL are converted to lowercase by default--nomenclature is important.  
+When the backend and frontend are on different origins (hostname/port), [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) is necessary to be considered. A critical piece of code was:
+	app.Options("/*", func(c *fiber.Ctx) error {
+		return c.SendStatus(fiber.StatusOK)
+	})
