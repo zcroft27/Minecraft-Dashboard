@@ -36,6 +36,9 @@ I use a three layer Controller-Service-Repository architecture for this project.
 ## The Frontend
 The frontend dashboard is built with React + TypeScript.
 
+## Protected Endpoint Demo
+https://github.com/user-attachments/assets/868a0130-5b69-4ae5-a1ee-629d1c898a11
+
 ## General Design Choices
 I intentionally do not want to be able to start/stop the **VM** from this dashboard, and do not want to parameterize the execution
 of SSH commands. The VM should only be turned on from the Azure dashboard. If my endpoints become vulnerable, I want an extra layer of security,
